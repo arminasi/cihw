@@ -1,4 +1,3 @@
-
 const grid1 = [
   [".", ".", ".", "1", "4", ".", ".", "2", "."],
   [".", ".", "6", ".", ".", ".", ".", ".", "."],
@@ -84,6 +83,7 @@ function isSudokuSolving(grid) {
 		if(item === false) {
 			return false;
 		}
+		return true
 	})
 }
 
