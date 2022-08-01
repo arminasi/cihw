@@ -1,61 +1,70 @@
+
 function Library() {
 	this.books = []; //Array of LibraryBook
 	this.readers = []; //Array of Readers
 }
 
-Library.prototype.doHaveBook = function(requestedBook) {
-	const {title, author} = requestedBook;
-	return this.books.some(book => {
-		if(book.title === title && book.author === author) {
-			return true;
+Object.defineProperties(Library.prototype, {
+	doHaveBook: {
+		value: function(requestedBook) {
+			const {title, author} = requestedBook;
+			return this.books.some(book => {
+				if(book.title === title && book.author === author) {
+					return true;
+				}
+			})
 		}
-	})
-}
-
-Library.prototype.addBook = function(newBook) {
-	const {author, title} = newBook;
-	const libBook = new LibraryBook(title, author, Math.round(Math.random() * 1000), 1)
-	let flag = false;
-	if(this.doHaveBook(newBook)) {
-		this.books.forEach(book => {
-			if(book.title === libBook.title && book.author === libBook.author) {
-				book.increaseQuantityBy(1)
+	},
+	addBook: {
+		value: function(newBook) {
+			const {author, title} = newBook;
+			const libBook = new LibraryBook(title, author, Math.round(Math.random() * 1000), 1)
+			let flag = false;
+			if(this.doHaveBook(newBook)) {
+				this.books.forEach(book => {
+					if(book.title === libBook.title && book.author === libBook.author) {
+						book.increaseQuantityBy(1)
+					}
+				})
+			} else {
+				if(libBook instanceof LibraryBook) {
+					if(this.doHaveBook(libBook)) {
+						flag = true;
+					}
+					if(!flag) {
+						this.books.push(libBook);
+					}
+				}
 			}
-		})
-	} else {
-		if(libBook instanceof LibraryBook) {
-			if(this.doHaveBook(libBook)) {
-				flag = true;
+		}
+	},
+	addBooks: {
+		value: function() {
+			for(let i = 0; i < arguments.length; i++) {
+				this.addBook(arguments[i]);
 			}
-			if(!flag) {
-				this.books.push(libBook);
+		}
+	},
+	checkReaderId: {
+		value: function(readerId) {
+			return this.readers.some(item => {
+				if(readerId === item.readerId) {
+					return true;
+				}
+			})
+		}		
+	},
+	lendBook: {
+		value: function(book) {
+			const {title, author} = book;
+			if(this.doHaveBook(book)) {
+				const readerBook = new ReaderBook(title, author, Math.round(Math.random() * 1000), "exp date", false)
+				this.readers.push(readerBook)
+				return readerBook
 			}
 		}
 	}
-}
-
-Library.prototype.addBooks = function() {
-	for(let i = 0; i < arguments.length; i++) {
-		this.addBook(arguments[i]);
-	}
-}
-
-Library.prototype.checkReaderId = function(readerId) {
-	return this.readers.some(item => {
-		if(readerId === item.readerId) {
-			return true;
-		}
-	})
-}
-
-Library.prototype.lendBook = function(book) {
-	const {title, author} = book;
-	if(this.doHaveBook(book)) {
-		const readerBook = new ReaderBook(title, author, Math.round(Math.random() * 1000), "exp date", false)
-		this.readers.push(readerBook)
-		return readerBook
-	}
-}
+})
 
 function Reader(firstName, lastName, readerId) {
 	if(typeof firstName === "string" && typeof lastName === "string" && typeof readerId) {
@@ -68,19 +77,24 @@ function Reader(firstName, lastName, readerId) {
 	}
 }
 
-Reader.prototype.toString = function() {
-	return `${this.firstName} ${this.lastName} ${this.readerId}`
-}
-
-Reader.prototype.borrowBook = function(book, library) {
-	const {title, author} = book;
-	const newBook = new ReaderBook(title, author, Math.round(Math.random() * 1000), "exp date", false)
-	if(library.doHaveBook(book)) {
-		if(book !== null && newBook instanceof ReaderBook) {
-			this.books.push(newBook);
+Object.defineProperties(Reader.prototype, {
+	toString: {
+		value: function() {
+			return `${this.firstName} ${this.lastName} ${this.readerId}`
+		}
+	},
+	borrowBook: {
+		value: function(book, library) {
+			const {title, author} = book;
+			const newBook = new ReaderBook(title, author, Math.round(Math.random() * 1000), "exp date", false)
+			if(library.doHaveBook(book)) {
+				if(book !== null && newBook instanceof ReaderBook) {
+					this.books.push(newBook);
+				}
+			}
 		}
 	}
-}
+})
 
 function Book(title, author) {
 	if((typeof title === "string" && typeof author === "string")) {
@@ -91,17 +105,22 @@ function Book(title, author) {
 	}
 }
 
-Book.prototype.isTheSameBook = function(book) {
-	if(book.author === this.author && book.title === this.title) {
-		return true;
-	} else {
-		return false;
+Object.defineProperties(Book.prototype, {
+	isTheSameBook: {
+		value: function(book) {
+			if(book.author === this.author && book.title === this.title) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	},
+	toString: {
+		value: function() {
+			return `${this.author} ${this.title}`
+		}
 	}
-}
-
-Book.prototype.toString = function() {
-	return `${this.author} ${this.title}`
-}
+})
 
 function LibraryBookBase(title, author, bookId) {
 	Book.call(this, title, author, bookId)
@@ -113,9 +132,11 @@ function LibraryBookBase(title, author, bookId) {
 }
 Object.setPrototypeOf(Book.prototype, LibraryBookBase.prototype)
 
-LibraryBookBase.prototype.toString = function() {
-	return `${this.author} ${this.title} ${this.bookId}`
-}
+Object.defineProperty(LibraryBookBase.prototype, "toString", {
+	value: function() {
+		return `${this.author} ${this.title} ${this.bookId}`
+	}
+})
 
 function LibraryBook(title, author, bookId, quantity) {
 	Book.call(this, title, author, bookId, quantity)
@@ -127,19 +148,25 @@ function LibraryBook(title, author, bookId, quantity) {
 }
 Object.setPrototypeOf(Book.prototype, LibraryBook.prototype)
 
-LibraryBook.prototype.toString = function() {
-	return `${this.author} ${this.title} ${this.bookId} ${this.quantity}`
-}
-
-LibraryBook.prototype.increaseQuantityBy = function(amount) {
-	this.quantity += amount;
-}
-
-LibraryBook.prototype.decreaseQuantityBy = function(amount) {
-	if(this.quantity >= amount) {
-		this.quantity -= amount;
-	}
-}
+Object.defineProperties(LibraryBook.prototype, {
+	toString: {
+		value: function() {
+			return `${this.author} ${this.title} ${this.bookId} ${this.quantity}`
+		}
+	},
+	increaseQuantityBy: {
+		value: function(amount) {
+			this.quantity += amount;
+		}
+	},
+	decreaseQuantityBy: {
+		value: decreaseQuantityBy = function(amount) {
+			if(this.quantity >= amount) {
+				this.quantity -= amount;
+			}
+		}
+	},
+})
 
 function ReaderBook(title, author, bookId, expirationDate, isReturned) {
 	Book.call(this, title, author, bookId, expirationDate, isReturned)
@@ -152,9 +179,11 @@ function ReaderBook(title, author, bookId, expirationDate, isReturned) {
 }
 Object.setPrototypeOf(Book.prototype, ReaderBook.prototype)
 
-ReaderBook.prototype.toString = function () {
-	return `${this.author} ${this.title} ${this.bookId} ${this.expirationDate} ${this.isReturned}`
-}
+Object.defineProperty(ReaderBook.prototype, "toString", {
+	value: function () {
+		return `${this.author} ${this.title} ${this.bookId} ${this.expirationDate} ${this.isReturned}`
+	}
+})
 
 const me = new Reader("Arman", "Minasyan", 88)
 const Lib = new Library()
