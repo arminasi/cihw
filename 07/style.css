@@ -21,3 +21,10 @@
 	flex-wrap: wrap;
 	justify-content: center;
 }
+
+.img {
+    width: 100px;
+    height: 100px;
+    padding: 0;
+    margin: 0 auto;
+}

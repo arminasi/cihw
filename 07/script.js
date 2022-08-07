@@ -1,4 +1,3 @@
-
 function fetchData(url) {
   const BASE_URL = 'https://ghibliapi.herokuapp.com/'
   const newUrl = url.startsWith('/') ? url.slice(1) : url
@@ -24,6 +23,7 @@ function App() {
   const state = {
     people: [],
   }
+
 
   function setState(obj) {
     for (let key in obj) {
@@ -61,8 +61,12 @@ function People(people) {
   return container
 }
 
-function Person(name, age, gender, eye_color, hair_color) {
-  const container = document.createElement('div')
+function Person(name, age, gender, eye_color, hair_color, id, films) {
+  const container = document.createElement('div');
+
+  const imageContainer = document.createElement("img");
+  imageContainer.setAttribute("class", "img");
+
   container.setAttribute('component-name', 'Person')
   container.classList.add('user')
 
@@ -86,9 +90,15 @@ function Person(name, age, gender, eye_color, hair_color) {
 	hair_colorEl.classList.add("hair_color")
 
 	const filmListBtn = document.createElement("button")
-	filmListBtn.innerHTML = "Film List";
+	filmListBtn.innerHTML = "film avatar";
 
-	filmListBtn.addEventListener("click", () => {})
+  async function filmsFetch(films) {
+    const response = await fetch(films);
+    const data = response.json();
+    return data;
+  }
+
+	filmListBtn.addEventListener("click", () => filmsFetch(films).then(data => imageContainer.src = data.image));
 
   nameEl.innerHTML = name
   ageEl.innerHTML = `${age} yo`
@@ -96,7 +106,6 @@ function Person(name, age, gender, eye_color, hair_color) {
 	eye_colorEl.innerHTML = `eye color - ${eye_color}`;
 	hair_colorEl.innerHTML = `hair color - ${hair_color}`;
 
-  container.append(nameEl, ageElWrap, genderEl, eye_colorEl, hair_colorEl, filmListBtn)
-
+  container.append(nameEl, imageContainer, ageElWrap, genderEl, eye_colorEl, hair_colorEl, filmListBtn)
   return container
 }
