@@ -1,0 +1,82 @@
+#root {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.top {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 310px;
+	margin: 4px;
+}
+
+#addBtn {
+	border: none;
+	color: white;
+	background-color: rgb(138, 163, 235);
+	width: 60px;
+	height: 28px;
+	cursor: pointer;
+}
+
+#addBtn:hover {
+	transform: scale(1.05);
+	transition: 0.2s;
+	background: rgb(73, 87, 242);
+}
+
+#filterBtn {
+	border: none;
+	color: white;
+	background-color: rgb(235, 198, 138);
+	width: 60px;
+	height: 28px;
+	cursor: pointer;
+}
+
+#filterBtn:hover {
+	transform: scale(1.05);
+	transition: 0.2s;
+	background: rgb(255, 160, 59);
+}
+
+.delBtn {
+	right: 0px;
+	border: none;
+	background: rgb(87, 123, 231);
+	color: white;
+	cursor: pointer;
+	position: absolute;
+
+}
+
+.users {
+	width: 336px;
+}
+
+.wrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.user {
+	position: relative;
+	cursor: pointer;
+	justify-content:space-evenly;
+	width: 320px;
+	height: 40px;
+	margin: 6px;
+	align-items: center;
+	display: flex;
+	background: rgb(87, 123, 231);
+	color: white;
+	transition: 0.2s;
+}
+
+.user:hover {
+	transform: scale(1.05);
+	transition: 0.2s;
+	background: rgb(73, 87, 242);
+}

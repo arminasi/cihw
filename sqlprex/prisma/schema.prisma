@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id				Int      @id @default(autoincrement())
+  name			String
+	car_id		Int?
+	brand_id	Int?
+	cars			Car? @relation(fields: [car_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+	brands		Brand? @relation(fields: [brand_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Car {
+  id        Int      @id @default(autoincrement())
+  year  		Int?
+  model 		String
+	users			User[]
+}
+
+model Brand {
+	id        Int      @id @default(autoincrement())
+	name			String
+	users			User[]
+}
