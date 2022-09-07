@@ -11,23 +11,24 @@ datasource db {
 }
 
 model User {
-  id				Int      @id @default(autoincrement())
-  name			String
-	car_id		Int?
-	brand_id	Int?
-	cars			Car? @relation(fields: [car_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-	brands		Brand? @relation(fields: [brand_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id       Int    @id @default(autoincrement())
+  name     String
+  car_id   Int?   @unique
+  brand_id Int?   @unique
 }
 
 model Car {
-  id        Int      @id @default(autoincrement())
-  year  		Int?
-  model 		String
-	users			User[]
+  id      Int    @id @default(autoincrement())
+  year    Int?
+  model   String
+  brandId Int    @unique
+
+  Brand Brand? @relation(fields: [brandId], references: [id])
 }
 
 model Brand {
-	id        Int      @id @default(autoincrement())
-	name			String
-	users			User[]
+  id   Int    @id @default(autoincrement())
+  name String
+
+  cars Car[]
 }

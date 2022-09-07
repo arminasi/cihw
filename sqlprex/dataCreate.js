@@ -1,32 +1,32 @@
-// import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
-// const client = new PrismaClient();
+const client = new PrismaClient();
 
 
-// async function createData() {
-// 	try {
-// 		const res = await client.car.createMany(
-// 			{
-// 				data: [
-// 					{year: 2020, model: "a180"},
-// 					{year: 2018, model: "435i"},
-// 					{year: 2005, model: "540i"},
-// 					{year: 2010, model: "328i"},
-// 					{year: 2008, model: "Civic"},
-// 					{year: 2022, model: "Pilot"}
-// 				]
-// 			}
-// 		)
-// 	} catch(err) {
-// 		console.log(err.message);
-// 	} finally {
-// 		async() => {
-// 			await client.$disconnect();
-// 		}
-// 	}
-// }
+async function createData() {
+	try {
+		const res = await client.car.createMany(
+			{
+				data: [
+					{year: 2020, model: "a180", brandId: 2},
+					{year: 2018, model: "435i", brandId: 1},
+					{year: 2005, model: "540i", brandId: 1},
+					{year: 2010, model: "328i", brandId: 1},
+					{year: 2008, model: "Civic", brandId: 3},
+					{year: 2022, model: "Pilot", brandId: 3}
+				]
+			}
+		)
+	} catch(err) {
+		console.log(err.message);
+	} finally {
+		async() => {
+			await client.$disconnect();
+		}
+	}
+}
 
-// createData()
+createData()
 
 // async function createData2() {
 // 		try {

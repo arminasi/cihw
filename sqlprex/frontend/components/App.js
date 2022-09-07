@@ -19,7 +19,7 @@ export async function App() {
 	container.setAttribute("class", "wrapper");
 
 	const data = await getInfo();
-
+	console.log(data)
 	container.append(Users(data, deleteUser));
 	root.append(container);
 	return root;
