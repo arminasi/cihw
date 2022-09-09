@@ -9,8 +9,8 @@ app.use(cors())
 app.route("/users")
 .get(async(req, res) => {
 	const users = await getAllUsers();
-	const page = +req.query.page;
-	const limit = +req.query.limit;
+	const page = parseInt(req.query.page);
+	const limit = parseInt(req.query.limit);
 
 	const startIndex = (page - 1) * limit;
 	const endIndex = page * limit;
