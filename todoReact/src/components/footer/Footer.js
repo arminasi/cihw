@@ -17,7 +17,7 @@ export default class Footer extends Component {
 					display: "flex", 
 					justifyContent: "center"
 				}}>
-						{length === 0 ? "Empty list" : length} / {completed === 0 ? "0" : completed}
+						{length === 0 ? "Empty list" : length} / {completed() === 0 ? "0" : completed()}
 				</div>
 				<button style={{
 					border: "none", 

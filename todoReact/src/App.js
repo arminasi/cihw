@@ -15,53 +15,57 @@ const idGenerator = generateId();
 export default class App extends Component {
 	constructor(props) {
 		super(props)
-		this.state = {text: "", todos: []}
+		this.state = {text: "", todoItems: []}
 	}
+	
+	getInputValue = (e) => {
+		this.setState({text: e.target.value})
+	}
+
+
+	addTodo = () => {
+		this.setState({todoItems: [...this.state.todoItems, {title: this.state.text, id: idGenerator(), isCompleted: false}], text: ""});
+	}
+	
+	deleteTodo = (id) => {
+		this.setState({todoItems: this.state.todoItems.filter(item => item.id !== id)})
+	}
+	
+	checkboxHandle = (id) => {
+		const elem = this.state.todoItems.find(elem => elem.id === id)
+		this.setState({todoItems: this.state.todoItems.filter(todo => todo.id !== elem.id)})
+		setTimeout(() => {
+			this.setState({todoItems: [...this.state.todoItems, {title: elem.title, id: elem.id, isCompleted: !elem.isCompleted}]})
+		}, 200)
+	}
+	
+	clearCompleted = () => {
+		this.setState({todoItems: this.state.todoItems.filter(item => !item.isCompleted)})
+	}
+	
+	completed = () => {
+		return this.state.todoItems.filter(item => item.isCompleted).length
+	} 
+	
 	render() {
-		const getInputValue = (e) => {
-			this.setState({text: e.target.value})
-		}
-
-		const addTodo = () => {
-			this.setState({todos: [...this.state.todos, {title: this.state.text, id: idGenerator(), isCompleted: false}], text: ""});
-		}
-
-		const deleteTodo = (id) => {
-			this.setState({todos: this.state.todos.filter(item => item.id !== id)})
-		}
-
-		const checkboxHandle = (id) => {
-			const elem = this.state.todos.find(elem => elem.id === id)
-			this.setState({todos: this.state.todos.filter(todo => todo.id !== elem.id)})
-			setTimeout(() => {
-				this.setState({todos: [...this.state.todos, {title: elem.title, id: elem.id, isCompleted: !elem.isCompleted}]})
-			}, 200)
-		}
-
-		const clearCompleted = () => {
-			this.setState({todos: this.state.todos.filter(item => !item.isCompleted)})
-		}
-
-		const completed = this.state.todos.filter(item => item.isCompleted).length
-
 		return (
 			<>
 				<Header
-						getInputValue={getInputValue}
-						addTodo={addTodo} 
+						getInputValue={this.getInputValue}
+						addTodo={this.addTodo} 
 						text={this.state.text}
 
 						/>
 				<List
-						todos = { this.state.todos }
-						deleteTodo = { deleteTodo }
-						checkboxHandle = {checkboxHandle}
+						todoList = { this.state.todoItems }
+						deleteTodo = { this.deleteTodo }
+						checkboxHandle = {this.checkboxHandle}
 
 						/>
 				<Footer 
-						length = {this.state.todos.length} 
-						completed= {completed}
-						clearCompleted = {clearCompleted}
+						length = {this.state.todoItems.length} 
+						completed= {this.completed}
+						clearCompleted = {this.clearCompleted}
 						/>
 			</>
 		)

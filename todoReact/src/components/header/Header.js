@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 
 export default class Header extends Component {
 	render() {
-
 		const { getInputValue, addTodo, text } = this.props;
 
 		return (
