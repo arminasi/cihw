@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteTodo, toggleTodo, togglePriority, colorSelector } from '../../redux/todoItems'
+import { useDispatch } from 'react-redux'
+import { deleteTodo, toggleTodo, togglePriority } from '../../redux/todoItems'
 import { useState } from 'react';
 
 export default function Todo ({item}) {

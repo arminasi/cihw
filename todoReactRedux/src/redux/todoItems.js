@@ -1,9 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { idGenerator } from '../App'
 
 const initialState = {
 	items: []
 }
+
+function generateId() {
+	let id = 0;
+	return () => {
+		return id += 1;
+	}
+}
+
+const idGenerator = generateId();
+
 
 export const todoItemsSlice = createSlice({
   name: 'todoItems',
@@ -41,9 +50,9 @@ export const todoItemsSlice = createSlice({
 export function colorSelector(state) {
 	return state.todoItems.items
 }
+export const selectTodoItems = (state) => state.todoItems.items
 
 export const { addTodo, deleteTodo, toggleTodo, clearCompleted, togglePriority } = todoItemsSlice.actions
 
-export const selectTodoItems = (state) => state.todoItems.items
 
 export default todoItemsSlice.reducer
